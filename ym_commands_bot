@@ -1,0 +1,81 @@
+import telebot;
+import os
+import time
+from yandex_music import *
+import datetime
+import pytz
+
+token="y0_AgAAD7B4zrAADTqESp_pxJ_odnyyAVz5NBwscDJw"
+client = Client(token).init()
+pst = pytz.timezone('Europe/Moscow')
+
+bot = telebot.TeleBot("6678849272:gx0hzayS8FFii__C-zUWQ")
+global name
+name = ""
+global playlist
+playlist = ""
+
+
+@bot.message_handler(content_types=['text'])
+def get_text_messages(message):
+
+    if message.text == "/playlists":
+        bot.send_message(message.from_user.id, "Имя пользователя")
+        bot.register_next_step_handler(message, get_name4playlist)
+
+
+    elif message.text == "/playlist_tracks":
+        bot.send_message(message.from_user.id, "Имя пользователя и ID треклиста")
+        bot.register_next_step_handler(message, get_playlist_tracks)
+
+    elif message.text == "/like_tracklist":
+        bot.send_message(message.from_user.id, "Имя пользователя и кол-во треков (если все - только имя)")
+        bot.register_next_step_handler(message, get_like_tracks)
+
+    else:
+        bot.send_message(message.from_user.id, "Я тебя не понимаю. Напиши /help.")
+
+
+def get_like_tracks(message):
+    temp = message.text
+    name = temp.split(' ')[0]
+    if len(temp.split(' '))==1:
+        count = len(client.users_likes_tracks(name))
+    else: count = int(temp.split(' ')[1])
+    for i in range(0, count):
+        liketrack = client.users_likes_tracks(name)[i].fetch_track()
+        mess = str(i+1)+'. '+liketrack.title+' - '+liketrack.artists[0].name
+        bot.send_message(message.from_user.id, mess)
+
+def get_name4playlist(message):
+    global name
+    name = message.text
+    track = client.usersPlaylistsList(name)
+    size = len(track)
+    for i in range(0, size):
+        create = datetime.datetime.strptime(track[i].created, '%Y-%m-%dT%H:%M:%S%z')
+        create_msk = create.astimezone(pst)
+        bot.send_message(message.from_user.id, str(i+1)+'. '+track[i].title+', ID= '+str(track[i].kind)+', создан: '+create_msk.strftime("%Y-%m-%d")+' '+create_msk.strftime("%H:%M:%S"))
+
+
+def get_name(message):
+    global name
+    name = message.text
+    bot.send_message(message.from_user.id, "И название плейлиста")
+    bot.register_next_step_handler(message, show_playlist_tracks)
+
+def get_playlist_tracks(message):
+    temp = message.text
+    name = temp.split(' ')[0]
+    ID = int(temp.split(' ')[1])
+    list = client.users_playlists(ID, name)
+    count = list.track_count
+    for i in range(0, count):
+         date_time = datetime.datetime.strptime(list.tracks[i].timestamp, '%Y-%m-%dT%H:%M:%S%z')
+         date_time_msk = date_time.astimezone(pst)
+         track = str(i+1)+'. '+list.tracks[i].track.title+' - '+list.tracks[i].track.artists[0].name+', добавлено '+str(date_time_msk.strftime("%Y-%m-%d"))+' в '+str(date_time_msk.strftime("%H:%M:%S"))
+         bot.send_message(message.from_user.id, track)
+
+
+bot.polling(none_stop=True, interval=0)
+

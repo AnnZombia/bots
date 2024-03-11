@@ -1,0 +1,36 @@
+import telebot;
+import os
+import time
+from yandex_music import *
+import datetime
+import pytz
+
+group = -4117366707
+bot = telebot.TeleBot("7023826505:wZ8az6MuoAAwkh120")
+
+@bot.message_handler(content_types=['text'])
+def get_text_messages(message):
+
+    if message.text == "/start":
+        bot.send_message(message.from_user.id, "Приветствую! Воспользуйтесь меню для ввода сообщения.")
+
+    if message.text == "/question":
+        bot.send_message(message.from_user.id, "Напишите свой вопрос одним сообщением:")
+        bot.register_next_step_handler(message, get_question, message.from_user.username, message.from_user.id)
+
+    if message.text == "/wish":
+        bot.send_message(message.from_user.id, "Напишите свое пожелание одним сообщением:")
+        bot.register_next_step_handler(message, get_wish, message.from_user.username, message.from_user.id)
+
+def get_question(message, author, id):
+    mess = message.text
+    bot.send_message(group, "Вопрос: "+mess+"\nАвтор: "+author)
+    bot.send_message(id, "Спасибо, вопрос принят.")
+
+def get_wish(message, author, id):
+    mess = message.text
+    bot.send_message(group, "Пожелание: "+mess+"\nАвтор: "+author)
+    bot.send_message(id, "Спасибо, пожелание принято.")
+
+bot.polling(none_stop=True, interval=0)
+

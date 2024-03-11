@@ -1,0 +1,19 @@
+import telebot
+import os
+import datetime
+import random
+import time
+
+bot = telebot.TeleBot("6678849272:gx0hzayS8FFii__C-zUWQ")
+bot.send_message(360112051, "бот перезапущен")
+
+while True:
+          now = datetime.datetime.now()
+          if now.hour == 7 and now.minute == 0:
+              with open ('/home/git/personal/phrases.txt', 'r') as file:
+                  lines = file.readlines()
+                  bot.send_message(360112051, random.choice(lines))
+                  bot.send_message(5008883606, random.choice(lines))
+                  time.sleep(60)
+
+bot.infinity_polling()

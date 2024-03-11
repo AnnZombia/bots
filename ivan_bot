@@ -1,0 +1,44 @@
+#import pytz
+import telebot
+import os
+import random
+import time
+from yandex_music import *
+import datetime
+
+token="AAAD7B4zrAADTqESp_pxJ_odnyyAVz5NBwscDJw"
+client = Client(token).init()
+forCheck0 = forCheck1 = ""
+bot = telebot.TeleBot("6678849272:hzayS8FFii__C-zUWQ")
+
+while True:
+          now = datetime.datetime.now()
+          if now.second == 0:
+             playlist = client.users_playlists(1006, 'izzzaman')
+
+#             count = playlist.track_count
+#             for i in range(0, count):
+#                 date_time = datetime.datetime.strptime(playlist.tracks[i].timestamp, '%Y-%m-%dT%H:%M:%S%z')
+#                 pst = pytz.timezone('Europe/Moscow')
+#                 date_time_msk = date_time.astimezone(pst)
+#                 print (playlist.tracks[i].track.title, " - ", playlist.tracks[i].track.artists[0].name,", добавлено ", date_time_msk.strftime("%Y-%m-%d"), " в", date_time_msk.strftime("%H:%M:%S"),)
+
+
+             list_track = playlist.tracks[0].track.title + " - " + playlist.tracks[0].track.artists[0].name
+
+             liketrack = client.users_likes_tracks('izzzaman')[0].fetch_track()
+             like_track = liketrack.title + " - " + liketrack.artists[0].name
+
+             if like_track != forCheck0:
+                bot.send_message(360112051, "New like track: " + like_track)
+
+             if list_track != forCheck1:
+                bot.send_message(360112051, "New track in PianoList: " + list_track)
+
+             forCheck0 = like_track
+             forCheck1 = list_track
+
+             time.sleep(60)
+
+bot.infinity_polling()
+
