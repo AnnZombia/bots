@@ -7,15 +7,15 @@ bot = telebot.TeleBot("7023826505:wZ8az6MuoAAwkh120")
 @bot.message_handler(content_types=['text']) 
 def get_text_messages(message):  
 
-    if message.text == "/status":
+    if message.text == "/status" and message.from_user.id == 532482715:
         status = os.system("ipmitool power status -H 192.168.88.88 -U user -P password")
         bot.send_message(message.from_user.id, status)
 
-    if message.text == "/poweroff":
+    if message.text == "/poweroff" and message.from_user.id == 532482715:
         poweroff = os.system("ipmitool power off -H 192.168.88.88 -U user -P password")
         bot.send_message(message.from_user.id, poweroff)
 
-    if message.text == "/poweron":
+    if message.text == "/poweron" and message.from_user.id == 532482715:
         poweroff = os.system("ipmitool power on -H 192.168.88.88 -U user -P password")
         bot.send_message(message.from_user.id, poweron)
 
