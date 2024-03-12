@@ -31,10 +31,6 @@ def get_text_messages(message):
     elif message.text == "/like_tracklist":
         bot.send_message(message.from_user.id, "Имя пользователя и кол-во треков (если все - только имя)")
         bot.register_next_step_handler(message, get_like_tracks)
-    
-    elif message.text == "/status":
-        status = os.system("uptime")
-        bot.send_message(message.from_user.id, status)
 
     else:
         bot.send_message(message.from_user.id, "Я тебя не понимаю.")
