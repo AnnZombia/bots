@@ -5,32 +5,31 @@ from yandex_music import *
 import datetime
 import pytz
 
-group = -4117366707
-bot = telebot.TeleBot("7023826505:wZ8az6MuoAAwkh120")
+group = -4117366707                                      // переменная, содержащая id группы, куда пересылаются сообщения
+bot = telebot.TeleBot("7023826505:wZ8az6MuoAAwkh120")    // авторизация по id:api бота, их получаешь у BotFather
 
-@bot.message_handler(content_types=['text'])
-def get_text_messages(message):
+@bot.message_handler(content_types=['text'])             // задаем, на что реагируем бот. В данном случае - на любое тектовое сообщение. Можно конкретизировать, что это будет команда, аудио и т.д.
+def get_text_messages(message):                          // функция которая вызывается методом Polling (см. троку 35)  при получении новых сообщений ботом.
 
-    if message.text == "/start":
-        bot.send_message(message.from_user.id, "Приветствую! Воспользуйтесь меню для ввода сообщения.")
+    if message.text == "/start":                         // инструкция, если получено сообщение "/start"
+        bot.send_message(message.from_user.id, "Приветствую! Воспользуйтесь меню для ввода сообщения.") // бот отправляет сообщение написавшему юзеру
 
-    if message.text == "/question":
-        bot.send_message(message.from_user.id, "Напишите свой вопрос одним сообщением:")
-        bot.register_next_step_handler(message, get_question, message.from_user.username, message.from_user.id)
+    if message.text == "/question":                      // инструкция, если получено сообщение "/question"
+        bot.send_message(message.from_user.id, "Напишите свой вопрос одним сообщением:") // бот отправляет сообщение написавшему юзеру
+        bot.register_next_step_handler(message, get_question, message.from_user.username, message.from_user.id) // управление передается следующей функции, в данном случае get_question 
 
-    if message.text == "/wish":
-        bot.send_message(message.from_user.id, "Напишите свое пожелание одним сообщением:")
-        bot.register_next_step_handler(message, get_wish, message.from_user.username, message.from_user.id)
+    if message.text == "/wish":                          // инструкция, если получено сообщение "/wish"
+        bot.send_message(message.from_user.id, "Напишите свое пожелание одним сообщением:") // бот отправляет сообщение написавшему юзеру
+        bot.register_next_step_handler(message, get_wish, message.from_user.username, message.from_user.id) // управление передается следующей функции, в данном случае get_wish 
 
-def get_question(message, author, id):
-    mess = message.text
-    bot.send_message(group, "Вопрос: "+mess+"\nАвтор: "+author)
-    bot.send_message(id, "Спасибо, вопрос принят.")
+def get_question(message, author, id):                   // функция для пересылки полученного вопроса. Принимает на вход три параметра, обязательные только первые два
+    mess = message.text                                  // создаем локальную переменную, присваиваем ей значение первой переменной, с которой была вызвана функция
+    bot.send_message(group, "Вопрос: "+mess+"\nАвтор: "+author) // бот отправляет сообщение в группу (id прописан выше)
+    bot.send_message(id, "Спасибо, вопрос принят.")      // бот отправляет сообщение написавшему юзеру
 
-def get_wish(message, author, id):
-    mess = message.text
-    bot.send_message(group, "Пожелание: "+mess+"\nАвтор: "+author)
-    bot.send_message(id, "Спасибо, пожелание принято.")
+def get_wish(message, author, id):                       // функция для пересылки полученного пожелания. Принимает на вход три параметра, обязательные только первые два
+    mess = message.text                                  // создаем локальную переменную, присваиваем ей значение первой переменной, с которой была вызвана функция
+    bot.send_message(group, "Пожелание: "+mess+"\nАвтор: "+author) // бот отправляет сообщение в группу (id прописан выше)
+    bot.send_message(id, "Спасибо, пожелание принято.")  // бот отправляет сообщение написавшему юзеру
 
-bot.polling(none_stop=True, interval=0)
-
+bot.polling(none_stop=True, interval=0)                  // метод, который представляет собой бесконечный цикл запроса обновлений с сервера, который будет вызывать функцию get_text_messages
