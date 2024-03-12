@@ -1,9 +1,6 @@
 import telebot;
 import os
-import time
 from yandex_music import *
-import datetime
-import pytz
 
 group = -4117366707                                      # переменная, содержащая id группы, куда пересылаются сообщения
 bot = telebot.TeleBot("7023826505:wZ8az6MuoAAwkh120")    # авторизация по id:api бота, их получаешь у BotFather
