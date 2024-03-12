@@ -1,8 +1,22 @@
 import telebot
 import os
 
+bot = telebot.TeleBot("7023826505:wZ8az6MuoAAwkh120")
 
 
-def get_status(message)
-	status = os.system("ipmitool power status -H 192.168.88.88 -U user -P password")
-	bot.send_message(message.from_user.id, status)
+@bot.message_handler(content_types=['text']) 
+def get_text_messages(message):  
+
+    if message.text == "/status":
+        status = os.system("ipmitool power status -H 192.168.88.88 -U user -P password")
+        bot.send_message(message.from_user.id, status)
+
+    if message.text == "/poweroff":
+        poweroff = os.system("ipmitool power off -H 192.168.88.88 -U user -P password")
+        bot.send_message(message.from_user.id, poweroff)
+
+    if message.text == "/poweron":
+        poweroff = os.system("ipmitool power on -H 192.168.88.88 -U user -P password")
+        bot.send_message(message.from_user.id, poweron)
+
+bot.polling(none_stop=True, interval=0)
