@@ -23,7 +23,6 @@ def get_text_messages(message):
         bot.send_message(message.from_user.id, "Имя пользователя")
         bot.register_next_step_handler(message, get_name4playlist)
 
-
     elif message.text == "/playlist_tracks":
         bot.send_message(message.from_user.id, "Имя пользователя и ID треклиста")
         bot.register_next_step_handler(message, get_playlist_tracks)
