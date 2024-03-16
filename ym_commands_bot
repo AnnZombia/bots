@@ -5,15 +5,15 @@ from yandex_music import *
 import datetime
 import pytz
 
-token="y0_AgAAD7B4zrAADTqESp_pxJ_odnyyAVz5NBwscDJw"                # Токен Yandex Music
-client = Client(token).init()                                      # Инициализируем клиента Yandex Music
-pst = pytz.timezone('Europe/Moscow')                               # Переменная с TimeZone
+token="y0_AgAAD7B4zrAADTqESp_pxJ_odnyyAVz5NBwscDJw"
+client = Client(token).init()
+pst = pytz.timezone('Europe/Moscow')
 
-bot = telebot.TeleBot("6678849272:gx0hzayS8FFii__C-zUWQ")          # авторизация по id:api бота, их получаешь у BotFather
-global name                                                        # Объявление переменной для хранения имени пользователя
-name = ""                                                          # Инициализация переменной
-global playlist                                                    # Объявление переменной для хранения названия плейлиста
-playlist = ""                                                      # Инициализация переменной
+bot = telebot.TeleBot("6678849272:gx0hzayS8FFii__C-zUWQ")
+global name
+name = ""
+global playlist
+playlist = ""
 
 
 @bot.message_handler(content_types=['text'])
@@ -23,7 +23,6 @@ def get_text_messages(message):
         bot.send_message(message.from_user.id, "Имя пользователя")
         bot.register_next_step_handler(message, get_name4playlist)
 
-
     elif message.text == "/playlist_tracks":
         bot.send_message(message.from_user.id, "Имя пользователя и ID треклиста")
         bot.register_next_step_handler(message, get_playlist_tracks)
@@ -31,10 +30,6 @@ def get_text_messages(message):
     elif message.text == "/like_tracklist":
         bot.send_message(message.from_user.id, "Имя пользователя и кол-во треков (если все - только имя)")
         bot.register_next_step_handler(message, get_like_tracks)
-    
-    elif message.text == "/status":
-        status = os.system("uptime")
-        bot.send_message(message.from_user.id, status)
 
     else:
         bot.send_message(message.from_user.id, "Я тебя не понимаю.")
