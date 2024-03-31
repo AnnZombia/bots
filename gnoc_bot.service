@@ -1,0 +1,12 @@
+[Unit]
+Description=TelegramBotGNOC
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python /home/services/gnoc_bot
+ExecStop=/home/services/gnoc_bot_stop
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

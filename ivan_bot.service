@@ -1,0 +1,12 @@
+[Unit]
+Description=IvanBot
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python /home/services/ivan_bot
+ExecStop=/home/services/ivan_bot_stop
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

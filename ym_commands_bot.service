@@ -1,0 +1,12 @@
+[Unit]
+Description=BotCommand
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python /home/services/ym_commands_bot
+ExecStop=/home/services/ym_commands_bot_stop
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
