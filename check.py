@@ -1,22 +1,25 @@
 import os
 import time
-import hashlib
+notify = f'''
+osascript -e 'display notification "Page was updated" with title "Warning"'
+'''
 
 while True:
     curl = 'wget ya.ru -O check'
     os.system(curl)
-    with open(check, 'rb') as f:
-        hash = hashlib.file_digest(f, 'sha256').hexdigest()
-        print('new hash:', hash)
+
+    with open('check', 'r+') as file1:
+        data = file1.read()
+        ha = str (hash(data))
         
-    with open("file","w+") as f:
-        last_hash = f.readline()
-        print('previous hash:', last_hash)
-        if hash == last_hash: pass
+    with open('hash', 'r+') as file2:
+        last_hash = file2.read()
+        if ha == last_hash: pass
         else:   
-            f.truncate(0)
-            f.write(hash)
+            file2.truncate(0)
+            file2.write(str(ha))
+            os.system(notify)
           
-    time.sleep(60)
+    time.sleep(5)
 
   
