@@ -20,4 +20,4 @@ while True:
             file2.write(str(ha))
             os.system(notify)
           
-    time.sleep(5)
+    time.sleep(15)
